@@ -1,7 +1,7 @@
 <template>
  <section class="catalog">
         <ProductList :products="products" />
-        <BasePagination :page="page" :count="countProducts" :per-page="productsPerPage"  />
+        <BasePagination v-model="page" :count="countProducts" :per-page="productsPerPage"  />
       </section>
 </template>
 
@@ -9,6 +9,7 @@
 import products from './data/products';
 import ProductList from './components/ProductList.vue';
 import BasePagination from './components/BasePagination.vue';
+
 export default {
   name: 'App',
   data() {
@@ -26,7 +27,7 @@ export default {
       return products.length;
     },
   },
-  components: { ProductList, BasePagination},
+  components: { ProductList, BasePagination },
 };
 </script>
 
