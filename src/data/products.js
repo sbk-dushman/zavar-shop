@@ -116,13 +116,13 @@ export default [
     сategoryId: 4,
     title: 'Наушники Sony',
     price: 30690,
-    img: 'img/radio.jpg',
+    img: 'img/headphones.jpg',
   },
   {
     id: 18,
     сategoryId: 4,
     title: 'Радионяня Motorola MBP16',
     price: 3690,
-    img: 'img/headphones.jpg',
+    img: 'img/radio.jpg',
   },
 ];
