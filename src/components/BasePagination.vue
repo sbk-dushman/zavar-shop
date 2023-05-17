@@ -70,6 +70,6 @@ export default {
 </script>
 <style>
 .pagination__link--disabled {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 </style>
