@@ -198,7 +198,7 @@
 <script>
 
 export default {
-  props: ['products'],
+  props: ['pageProps'],
 };
 </script>
 <style>
