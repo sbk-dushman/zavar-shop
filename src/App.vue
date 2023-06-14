@@ -1,11 +1,12 @@
 <template>
-  <component :is="getPageComponent" :page-props="curentPageProps" @gotoPage="(pageName,pageProps) => gotoPage(pageName,pageProps)"/>
+  <component :is="getPageComponent" :page-props="curentPageProps"/>
 </template>
 
 <script>
 import MainPage from './components/Pages/MainPage.vue';
 import ProductPage from './components/Pages/ProductPage.vue';
 import NotFoundPage from './components/Pages/NotFoundPage.vue';
+import eventBus from "@/eventBus.js";
 
 const routes = {
   main: 'MainPage',
@@ -31,6 +32,9 @@ export default {
     },
   },
   components: { MainPage, ProductPage, NotFoundPage },
+  created() {
+    eventBus.$on('gotoPage', (pageName,pageProps) => this.gotoPage(pageName, pageProps));
+  },
 };
 </script>
 

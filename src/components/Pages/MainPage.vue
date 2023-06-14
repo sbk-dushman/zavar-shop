@@ -15,8 +15,7 @@
                    :category-id.sync="filterCategoryId"/>
 
     <section class="catalog">
-      <ProductList :products="getProducts"
-      @gotoPage="(pageName,pageProps) => $emit('gotoPage',pageName,pageProps)"/>
+      <ProductList :products="getProducts"/>
       <BasePagination v-model="page" :count="countProducts" :per-page="productsPerPage"  />
 
     </section>
