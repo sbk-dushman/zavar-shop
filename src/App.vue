@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import MainPage from './components/Pages/MainPage.vue';
-import ProductPage from './components/Pages/ProductPage.vue';
-import NotFoundPage from './components/Pages/NotFoundPage.vue';
+import MainPage from '@/pages/MainPage.vue';
+import ProductPage from '@/pages/ProductPage.vue';
+import NotFoundPage from '@/pages/NotFoundPage.vue';
 import eventBus from "@/eventBus.js";
 
 const routes = {
