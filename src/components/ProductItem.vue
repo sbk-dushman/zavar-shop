@@ -1,9 +1,8 @@
 <template>
   <li class="catalog__item">
-  <a class="catalog__pic" href="#"
-  @click.prevent="gotoPage('product',{id:product.id})">
+  <router-link class="catalog__pic" href="#" :to="{name:'product', params:{id: product.id}}">
 <img :src="product.img" :alt="product.title">
-</a>
+</router-link>
 
 <h3 class="catalog__title">
 <a href="#">
@@ -42,7 +41,6 @@
 
 </template>
 <script>
-import gotoPage from '@/helpers/gotoPage';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
@@ -51,7 +49,6 @@ export default {
     numberFormat,
   },
   methods: {
-    gotoPage,
   },
 
 };
