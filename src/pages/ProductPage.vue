@@ -118,22 +118,8 @@
             </fieldset>
 
             <div class="item__row">
-              <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
 
-                <input type="text" v-model="productAmount" name="count">
-
-                <button type="button" aria-label="Добавить один товар">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
-
+              <ProductCounter v-model="productAmount"/>
               <button class="button button--primery" type="submit">
                 В корзину
               </button>
@@ -198,15 +184,16 @@
 <script>
 import products from '@/data/products';
 import categories from '@/data/categories';
-import gotoPage from '@/helpers/gotoPage';
 import numberFormat from '@/helpers/numberFormat';
+import ProductCounter from '@/components/ProductCounter.vue';
 
 export default {
   data() {
     return {
       productAmount: 1,
-        }
+    };
   },
+  components: { ProductCounter },
   filters: {
     numberFormat,
   },
@@ -217,10 +204,26 @@ export default {
     category() {
       return categories.find((category) => category.id === this.product.сategoryId);
     },
+    // productAmount() {
+    //   const cartProductItem = this.$store.state.cartProducts.find(
+    //     (item) => item.productId === this.product.id,
+    //   );
+
+    //   if (!cartProductItem) {
+    //     return 1;
+    //   }
+    //   return cartProductItem.amount;
+    // },
   },
   methods: {
     addToCart() {
-
+      this.$store.commit(
+        'addProductToCart',
+        {
+          productId: this.product.id,
+          amount: this.productAmount,
+        },
+      );
     },
   },
 };
