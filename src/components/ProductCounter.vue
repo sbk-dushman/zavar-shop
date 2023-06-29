@@ -1,6 +1,9 @@
 <template>
      <div class="form__counter">
-                <button @click.prevent="decrement(currentAmaunt) "type="button" aria-label="Убрать один товар">
+                <button :class="(currentAmaunt-1==0 ? 'is-off':'')"
+
+                @click.prevent="decrement(currentAmaunt)"
+                type="button" aria-label="Убрать один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -8,7 +11,7 @@
 
                 <input type="text" v-model.number="currentAmaunt" name="count">
 
-                <button @click.prevent="incriment(currentAmaunt)" type="button" aria-label="Добавить один товар">
+                <button  @click.prevent="incriment(currentAmaunt)" type="button" aria-label="Добавить один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -48,5 +51,12 @@ export default {
 
 </script>
 <style>
-
+button{
+  cursor: pointer;
+}
+.is-off{
+cursor: not-allowed;
+pointer-events: none;
+opacity: 0.5;
+}
 </style>
