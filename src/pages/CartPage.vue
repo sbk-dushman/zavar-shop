@@ -27,7 +27,7 @@
         <div class="cart__field">
           <ul class="cart__list">
             <CartItem v-for="item in products" :key="item.id"
-            v-model="item.amamount" :product="item.productDitails"/>
+            :product="item"/>
           </ul>
         </div>
 
@@ -36,7 +36,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>32 970 ₽</span>
+            Итого: <span>{{TotalPrice}} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit">
@@ -59,7 +59,7 @@ export default {
   },
   components: { CartItem },
   computed: {
-    ...mapGetters({ products: 'cartProductsDitail' }),
+    ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice' }),
   },
   methods: {
   },

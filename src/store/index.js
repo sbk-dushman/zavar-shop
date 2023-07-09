@@ -34,5 +34,8 @@ export default new Vuex.Store({
         }
     });
     },
+    cartTotalPrice(state, getters) {
+      return getters.cartProductsDitail.reduce((acc,item)=>(item.productDitails.price * item.amount)+acc,0)
+    },
   },
 });
