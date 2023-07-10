@@ -16,7 +16,7 @@
                 <ProductCounter v-model="productAmount"/>
               </div>
 
-              <!-- <div class="product__counter form__counter">
+              <div class="product__counter form__counter">
                 <button type="button" aria-label="Убрать один товар">
                   <svg width="10" height="10" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
@@ -30,10 +30,10 @@
                     <use xlink:href="#icon-plus"></use>
                   </svg>
                 </button>
-              </div> -->
+              </div>
 
               <b class="product__price">
-              {{product.productDitails.price | numberFormat}} ₽
+              {{(product.amount * product.productDitails.price) | numberFormat}} ₽
               </b>
 
               <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
@@ -53,16 +53,18 @@ export default {
     numberFormat,
   },
   components: { ProductCounter },
+
+  methods: {
+  },
   computed: {
     productAmount: {
-        get() {
-            this.product;
-        },
-        set() {
-        },
+      get() {
+        return this.product.amount;
+      },
+      set(value) {
+        this.$store.commit('updatateCartProductAmount', { productId: this.product.productId, amount: value});
+      },
     },
-  },
-  methods: {
   },
 
 };

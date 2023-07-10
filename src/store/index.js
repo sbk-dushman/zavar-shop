@@ -24,6 +24,12 @@ export default new Vuex.Store({
         );
       }
     },
+    updatateCartProductAmount(state, { productId, amount }) {
+      const CartItem = state.cartProducts.find((item) => item.productId === productId);
+      if (CartItem) {
+        CartItem.amount = amount;
+      }
+    },
   },
   getters: {
     cartProductsDitail(state) {
@@ -35,7 +41,8 @@ export default new Vuex.Store({
     });
     },
     cartTotalPrice(state, getters) {
-      return getters.cartProductsDitail.reduce((acc,item)=>(item.productDitails.price * item.amount)+acc,0)
+      return getters.cartProductsDitail.reduce((acc, item) => (
+        item.productDitails.price * item.amount) + acc, 0);
     },
   },
 });

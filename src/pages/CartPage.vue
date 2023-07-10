@@ -36,7 +36,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>{{TotalPrice}} ₽</span>
+            Итого: <span>{{TotalPrice | numberFormat}} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit">
