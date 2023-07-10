@@ -1,5 +1,7 @@
 <template>
-     <div class="form__counter">
+  <!-- form__counter-->
+
+     <div :class="counterClass">
                 <button :class="(currentAmaunt-1==0 ? 'is-off':'')"
 
                 @click.prevent="decrement(currentAmaunt)"
@@ -25,7 +27,7 @@ export default {
     prop: 'amount',
     event: 'amount-change',
   },
-  props: ['amount'],
+  props: ['amount', 'counter-class'],
   computed: {
 
     currentAmaunt: {

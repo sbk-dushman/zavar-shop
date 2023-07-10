@@ -119,7 +119,7 @@
 
             <div class="item__row">
                 <div class="form__counter">
-              <ProductCounter v-model="productAmount"/>
+              <ProductCounter counter-class="form__counter" v-model="productAmount"/>
             </div>
               <button class="button button--primery" type="submit">
                 В корзину

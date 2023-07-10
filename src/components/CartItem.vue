@@ -12,31 +12,14 @@
               <span class="product__code">
                 Артикул: {{ product.productDitails.id }}
               </span>
-              <div class="product__counter form__counter">
-                <ProductCounter v-model="productAmount"/>
-              </div>
-
-              <div class="product__counter form__counter">
-                <button type="button" aria-label="Убрать один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <input type="text" value="1" name="count">
-
-                <button type="button" aria-label="Добавить один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
-
+                <ProductCounter counter-class="product__counter form__counter" v-model="productAmount"/>
               <b class="product__price">
               {{(product.amount * product.productDitails.price) | numberFormat}} ₽
               </b>
 
-              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
+              <button
+                @click="deletePoduct(product.productDitails.id)"
+               class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
                 <svg width="20" height="20" fill="currentColor">
                   <use xlink:href="#icon-close"></use>
                 </svg>
@@ -45,6 +28,7 @@
 </template>
 <script>
 import numberFormat from '@/helpers/numberFormat';
+import { mapMutations } from 'vuex';
 import ProductCounter from './ProductCounter.vue';
 
 export default {
@@ -55,6 +39,7 @@ export default {
   components: { ProductCounter },
 
   methods: {
+    ...mapMutations({ deletePoduct: 'deleteCartProduct' }),
   },
   computed: {
     productAmount: {
