@@ -41,7 +41,7 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
-      filterColor: 1,
+      filterColor: 0,
       productsData: null,
     };
   },

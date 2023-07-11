@@ -32,7 +32,7 @@
 
           <fieldset class="form__block">
             <legend class="form__legend">Цвет</legend>
-            <ul class="colors">
+            <!-- <ul class="colors">
               <li class="colors__item">
                 <label class="colors__label">
                   <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#73B6EA'" checked>
@@ -77,7 +77,7 @@
                   <span class="colors__value" style="background-color: #000;">
                 </span></label>
               </li>
-            </ul>
+            </ul> -->
           </fieldset>
 
           <fieldset class="form__block">
