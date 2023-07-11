@@ -12,7 +12,9 @@
   <div class="content__catalog">
     <ProductFilter :price-to.sync="filterPriceTo"
                    :price-from.sync ="filterPriceFrom"
-                   :category-id.sync="filterCategoryId"/>
+                   :category-id.sync="filterCategoryId"
+                   :color.sync="filterColor"/>
+
 
     <section class="catalog">
       <ProductList :products="getProducts"/>
@@ -22,17 +24,16 @@
 
   </div>
 </main>
-
 </template>
 <script>
-
-import products from '@/data/products';
+import axios from 'axios';
 import ProductList from '@/components/ProductList.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
+import { API_BASE_PATH } from '../config';
 
 export default {
-  name: 'App',
+  name: 'MainPage',
   data() {
     return {
       page: 1,
@@ -40,32 +41,60 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
+      filterColor: 1,
+      productsData: null,
     };
   },
-  computed: {
-    filteredProducts() {
-      let filteredProducts = products;
-      if (this.filterPriceFrom > 0) {
-        filteredProducts = filteredProducts.filter((product) => product.price
-        >= this.filterPriceFrom);
-      }
-      if (this.filterPriceTo > 0) {
-        filteredProducts = filteredProducts.filter((product) => product.price
-        <= this.filterPriceTo);
-      }
-      if (this.filterCategoryId > 0) {
-        filteredProducts = filteredProducts.filter((product) => product.сategoryId
-         === this.filterCategoryId);
-      }
-
-      return filteredProducts;
+  watch: {
+    page() {
+      this.loadProducts();
     },
+    filterPriceFrom() {
+      this.loadProducts();
+    },
+    filterPriceTo() {
+      this.loadProducts();
+    },
+    filterCategoryId() {
+      this.loadProducts();
+    },
+    filterColor() {
+      this.loadProducts();
+    },
+
+  },
+  created() {
+    this.loadProducts();
+  },
+  methods: {
+    loadProducts() {
+      clearTimeout(this.loadProductsTimer);
+                  this.loadProductsTimer = setTimeout(() => {
+                  return axios.get(API_BASE_PATH + '/api/products', {
+                          params: {
+                          page: this.page,
+                          limit: this.productsPerPage,
+                          categoryId: this.filterCategoryId,
+                          minPrice: this.filterPriceFrom,
+                          maxPrice: this.filterPriceTo,
+                          colorId: this.filterColor,
+                          },
+          })
+          .then((response) =>  this.productsData = response.data);
+                }, 0);
+    },
+  },
+  computed: {
     getProducts() {
-      const offset = (this.page - 1) * this.productsPerPage;
-      return this.filteredProducts.slice(offset, offset + this.productsPerPage);
+      return this.productsData ? this.productsData.items.map(product=> {
+        return {
+          ... product,
+          img: product.image.file.url
+        }
+      }) : [];
     },
     countProducts() {
-      return this.filteredProducts.length;
+      return this.productsData ? this.productsData.pagination.total : 0;
     },
   },
   components: { ProductList, BasePagination, ProductFilter },

@@ -35,45 +35,45 @@
             <ul class="colors">
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#73B6EA" checked="">
+                  <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#73B6EA'" checked>
                   <span class="colors__value" style="background-color: #73B6EA;">
                   </span>
                 </label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#FFBE15">
+                  <input class="colors__radio sr-only"v-model="currentColor" type="radio" name="color" :value="'#FFBE15'">
                   <span class="colors__value" style="background-color: #FFBE15;">
                   </span>
                 </label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#939393">
+                  <input class="colors__radio sr-only"v-model="currentColor" type="radio" name="color" :value="'#939393'">
                   <span class="colors__value" style="background-color: #939393;">
                 </span></label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#8BE000">
+                  <input class="colors__radio sr-only"v-model="currentColor" type="radio" name="color" :value="'#8BE000'">
                   <span class="colors__value" style="background-color: #8BE000;">
                 </span></label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#FF6B00">
+                  <input class="colors__radio sr-only"v-model="currentColor" type="radio" name="color" :value="'#FF6B00'">
                   <span class="colors__value" style="background-color: #FF6B00;">
                 </span></label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#FFF">
+                  <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#FFF'">
                   <span class="colors__value" style="background-color: #FFF;">
                 </span></label>
               </li>
               <li class="colors__item">
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" name="color" value="#000">
+                  <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#000'">
                   <span class="colors__value" style="background-color: #000;">
                 </span></label>
               </li>
@@ -150,16 +150,19 @@
       </aside>
 </template>
 <script>
-import categories from '../data/categories';
+import axios from 'axios';
+import { API_BASE_PATH } from '../config';
 
 export default {
-  props: ['priceTo', 'priceFrom', 'categoryId'],
+  props: ['priceTo', 'priceFrom', 'categoryId', 'color'],
 
   data() {
     return {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentCategoryId: 0,
+      categoriesData: null,
+      currentColor: '',
 
     };
   },
@@ -168,7 +171,7 @@ export default {
       this.currentPriceFrom = value;
     },
     priceTo(value) {
-      this.currentPriceFrom = value;
+      this.currentPriceTo = value;
     },
     categoryId(value) {
       this.currentCategoryId = value;
@@ -179,16 +182,24 @@ export default {
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:categoryId', this.currentCategoryId);
+      this.$emit('update:color', this.currentColor);
     },
     reset() {
       this.$emit('update:priceTo', 0);
       this.$emit('update:priceFrom', 0);
       this.$emit('update:categoryId', 0);
+      this.$emit('update:color', '');
     },
+    loadCategories() {
+      axios.get(API_BASE_PATH + '/api/productCategories').then(response => this.categoriesData= response.data)
+    },
+  },
+  created() {
+    this.loadCategories();
   },
   computed: {
     categories() {
-      return categories;
+      return this.categoriesData ? this.categoriesData.items : [];
     },
   },
 };
