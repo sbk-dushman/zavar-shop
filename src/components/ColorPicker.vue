@@ -1,13 +1,13 @@
 <template>
   <ul class="colors">
-              <li class="colors__item">
+              <li class="colors__item" v-for="(color,index) in getColors" :key="color.id" >
                 <label class="colors__label">
-                  <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#73B6EA'" checked>
-                  <span class="colors__value" style="background-color: #73B6EA;">
+                  <input class="colors__radio sr-only" v-model="currentColor" type="radio" :name="color.id" :value="color.id">
+                <span class="colors__value" :style="`background-color:${color.code}`">
                   </span>
                 </label>
               </li>
-              <li class="colors__item">
+              <!-- <li class="colors__item">
                 <label class="colors__label">
                   <input class="colors__radio sr-only"v-model="currentColor" type="radio" name="color" :value="'#FFBE15'">
                   <span class="colors__value" style="background-color: #FFBE15;">
@@ -43,33 +43,50 @@
                   <input class="colors__radio sr-only" v-model="currentColor" type="radio" name="color" :value="'#000'">
                   <span class="colors__value" style="background-color: #000;">
                 </span></label>
-              </li>
+              </li> -->
             </ul>
 </template>
 <script>
+import axios from 'axios';
+import { API_BASE_PATH } from '../config';
 
 export default {
+  name: 'ColorPicker',
+  props: ['color'],
   model: {
-    prop: 'amount',
-    event: 'amount-change',
+    prop: 'color',
+    event: 'color-change',
   },
-  props: ['amount', 'counter-class'],
+  data() {
+    return {
+      ColorsData: null,
+    };
+  },
+  created() {
+    this.loadColors();
+  },
   computed: {
-
-    currentAmaunt: {
+    getColors() {
+      return this.ColorsData ? this.ColorsData.items : [];
+    },
+    currentColor: {
       get() {
-        return this.amount;
+        return this.color;
       },
       set(value) {
-        this.$emit('amount-change', value);
+        console.log(value);
+        this.$emit('color-change', value);
       },
     },
   },
   methods: {
-    loadProducts() {
-                  this.loadProductsTimer = setTimeout(() => {
-                  return axios.get(API_BASE_PATH + '/api/products');
-                  })
+    loadColors() {
+      clearTimeout(this.loadColorsTimer);
+      this.loadColorsTimer = setTimeout(() => {
+        return axios.get(API_BASE_PATH + '/api/colors')
+        .then((response)=> this.ColorsData = response.data )
+
+      }, 0);
             },
   },
 };
