@@ -32,6 +32,7 @@
 
           <fieldset class="form__block">
             <legend class="form__legend">Цвет</legend>
+
             <ColorPicker v-model="currentColor"/>
 
           </fieldset>
