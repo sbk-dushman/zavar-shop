@@ -61,7 +61,7 @@ export default {
                 .catch(() => this.productsLoadingFailed = true)
                 .then(() => this.colorLoading = false)
 
-      }, 8000);
+      }, 0);
             },
   },
 };
