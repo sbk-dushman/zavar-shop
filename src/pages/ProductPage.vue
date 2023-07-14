@@ -1,5 +1,10 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="productLoading|| productLoadingFailed">
+    <BaseLoader :is-loading="productLoading"
+     :is-loading-failed="productLoadingFailed"
+      @re-load="loadProducts()"/>
+  </main>
+  <main class="content container" v-else-if="productData">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -23,13 +28,15 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img width="570" height="570" :src="product.img" srcset="img/phone-square@2x.jpg 2x" :alt="product.title">
+          <img width="570" height="570" :src="product.image.file.url" :alt="product.title">
+
         </div>
         <ul class="pics__list">
           <li class="pics__item">
             <a href="" class="pics__link pics__link--current">
-              <img width="98" height="98" :src="product.img" srcset="img/phone-square-1@2x.jpg 2x" :alt="product.title">
+              <img width="98" height="98" :src="product.image.file.url" :alt="product.title">
             </a>
+
           </li>
           <li class="pics__item">
             <a href="" class="pics__link">
@@ -183,38 +190,49 @@
 </template>
 
 <script>
-import products from '@/data/products';
-import categories from '@/data/categories';
+import axios from 'axios';
 import numberFormat from '@/helpers/numberFormat';
 import ProductCounter from '@/components/ProductCounter.vue';
+import BaseLoader from '@/components/BaseLoader.vue';
+import { API_BASE_PATH } from '../config';
 
 export default {
   data() {
     return {
       productAmount: 1,
+      productLoading: false,
+      productData: null,
+      productLoadingFailed: false,
     };
   },
-  components: { ProductCounter },
+  watch: {
+    '$route.params.id': {
+      handler() {
+        this.loadProducts();
+      },
+      immediate: true,
+    },
+  },
+  components: { ProductCounter, BaseLoader },
   filters: {
     numberFormat,
   },
   computed: {
     product() {
-      return products.find((product) => product.id === +this.$route.params.id);
-    },
-    category() {
-      return categories.find((category) => category.id === this.product.сategoryId);
-    },
-    // productAmount() {
-    //   const cartProductItem = this.$store.state.cartProducts.find(
-    //     (item) => item.productId === this.product.id,
-    //   );
+      return this.productData;
+      // Почему-то не хочет работать метод map (из за асинхронности, но не понял как это обойти )
 
-    //   if (!cartProductItem) {
-    //     return 1;
-    //   }
-    //   return cartProductItem.amount;
-    // },
+      return this.productData ? this.productData.map((product) => {
+        return {
+          ... product,
+          img: product.image.file.url
+        }
+      }) : [];
+    },
+
+    category() {
+      return this.productData.category;
+    },
   },
   methods: {
     addToCart() {
@@ -226,9 +244,23 @@ export default {
         },
       );
     },
+    loadProducts() {
+      this.productLoadingFailed = false;
+      this.productLoading = true;
+      return axios.get(API_BASE_PATH +'/api/products/'+ this.$route.params.id)
+      .then((response)=> this.productData = response.data)
+      .catch(() => this.productLoadingFailed = true)
+      .then(()=>this.productLoading = false)
+    },
   },
 };
 </script>
 <style>
-
+.content{
+  min-height: 100vh;
+  /* position: relative; */
+}
+.header{
+  z-index: 2222 !important;
+}
 </style>
