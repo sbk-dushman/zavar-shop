@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import products from '@/data/products';
 import axios from 'axios';
 import { API_BASE_PATH } from '@/config';
 
@@ -40,16 +39,29 @@ export default new Vuex.Store({
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
     },
-    updatateCartProductsData(state, cartProductsData ) {
+    updatateCartProductsData(state, cartProductsData) {
       state.cartProductsData = cartProductsData;
+    },
+    syncCartProducts(state) {
+      state.cartProducts = state.cartProductsData.map((item) => {
+        return {
+              productId: item.product.id,
+              amount: item.quantity,
+
+          }
+    })
     },
   },
   getters: {
     cartProductsDitail(state) {
       return state.cartProducts.map((item) => {
+        const productDitails = state.cartProductsData.find((p)=>p.product.id === item.productId).product;
          return {
-          ... item,
-          productDitails: products.find(p=>p.id=== item.productId)
+          ...item,
+          productDitails: {
+            ...productDitails,
+            img: productDitails.image.file.url,
+          },
         }
     });
     },
@@ -63,15 +75,16 @@ export default new Vuex.Store({
 
       axios.get( API_BASE_PATH + '/api/baskets',{
          params: {
-        accessKey: context.state.userAccessKey,
+          userAccessKey: context.state.userAccessKey,
        }
       }).
-      then((response) => {
+        then((response) => {
           if (!context.state.userAccessKey) {
             localStorage.setItem('userAccessKey', response.data.user.accessKey);
             context.commit('updateUserAccessKey', response.data.user.accessKey);
           }
-        context.commit('updatateCartProductsData', response.data.items);
+          context.commit('updatateCartProductsData', response.data.items);
+          context.commit('syncCartProducts');
       });
     },
   },

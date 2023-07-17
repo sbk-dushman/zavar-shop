@@ -14,7 +14,7 @@
               </span>
                 <ProductCounter counter-class="product__counter form__counter" v-model="productAmount"/>
               <b class="product__price">
-              {{(product.amount * product.productDitails.price) | numberFormat}} ₽
+              {{getPriceForAmount | numberFormat}} ₽
               </b>
 
               <button
@@ -49,7 +49,11 @@ export default {
       set(value) {
         this.$store.commit('updatateCartProductAmount', { productId: this.product.productId, amount: value});
       },
+
     },
+    getPriceForAmount() {
+        return this.product.productDitails.price * this.product.amount;
+      }
   },
 
 };
