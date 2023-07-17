@@ -14,19 +14,7 @@ export default new Vuex.Store({
     cartProductsData: null,
   },
   mutations: {
-    addProductToCart(state, { productId, amount }) {
-      const CartItem = state.cartProducts.find((item) => item.productId === productId);
-      if (CartItem) {
-        CartItem.amount += amount;
-      } else {
-        state.cartProducts.push(
-          {
-            productId,
-            amount,
-          },
-        );
-      }
-    },
+
     updatateCartProductAmount(state, { productId, amount }) {
       const CartItem = state.cartProducts.find((item) => item.productId === productId);
       if (CartItem) {
@@ -85,6 +73,19 @@ export default new Vuex.Store({
           }
           context.commit('updatateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
+      });
+    },
+    addProductToCart(context, { productId, amount }) {
+      axios.post(API_BASE_PATH + '/api/baskets/products', {
+        productId:productId,
+        quantity:amount,
+      }, {
+        params: {
+          userAccessKey: context.state.userAccessKey,
+        },
+      }).then((response)=> {
+        context.commit('updatateCartProductsData', response.data.items);
+        context.commit('syncCartProducts');
       });
     },
   },

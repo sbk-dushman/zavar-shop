@@ -195,6 +195,7 @@ import numberFormat from '@/helpers/numberFormat';
 import ProductCounter from '@/components/ProductCounter.vue';
 import BaseLoader from '@/components/BaseLoader.vue';
 import { API_BASE_PATH } from '../config';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -220,7 +221,7 @@ export default {
   computed: {
     product() {
       return this.productData;
-      // Почему-то не хочет работать метод map (из за асинхронности, но не понял как это обойти )
+      // Почему-то не хочет работать метод map (из-за асинхронности, но не понял как это обойти )
 
       return this.productData ? this.productData.map((product) => {
         return {
@@ -235,15 +236,11 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['addProductToCart']),
     addToCart() {
-      this.$store.commit(
-        'addProductToCart',
-        {
-          productId: this.product.id,
-          amount: this.productAmount,
-        },
-      );
+      this.addProductToCart({ productId: this.product.id, amount: this.productAmount });
     },
+
     loadProducts() {
       this.productLoadingFailed = false;
       this.productLoading = true;
