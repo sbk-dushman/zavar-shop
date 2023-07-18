@@ -128,10 +128,12 @@
                 <div class="form__counter">
               <ProductCounter counter-class="form__counter" v-model="productAmount"/>
             </div>
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddedSending">
                 В корзину
               </button>
             </div>
+            <div v-show="productAddedSending" class="poduct-status" >Добавляем товар в корзину</div>
+            <div v-show="productAdded" class="poduct-status">Товар добавлен в корзину</div>
           </form>
         </div>
       </div>
@@ -194,8 +196,8 @@ import axios from 'axios';
 import numberFormat from '@/helpers/numberFormat';
 import ProductCounter from '@/components/ProductCounter.vue';
 import BaseLoader from '@/components/BaseLoader.vue';
-import { API_BASE_PATH } from '../config';
 import { mapActions } from 'vuex';
+import { API_BASE_PATH } from '../config';
 
 export default {
   data() {
@@ -204,6 +206,9 @@ export default {
       productLoading: false,
       productData: null,
       productLoadingFailed: false,
+      productAddedSending: false,
+      productAdded: false,
+
     };
   },
   watch: {
@@ -238,7 +243,15 @@ export default {
   methods: {
     ...mapActions(['addProductToCart']),
     addToCart() {
-      this.addProductToCart({ productId: this.product.id, amount: this.productAmount });
+      this.productAddedSending = true,
+      this.productAdded = false,
+
+      this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+      .then(()=> {
+        this.productAddedSending = false;
+          this.productAdded = true;
+      });
+
     },
 
     loadProducts() {
@@ -259,5 +272,11 @@ export default {
 }
 .header{
   z-index: 2222 !important;
+}
+.poduct-status{
+  border: 1px solid #9eff00;
+  margin: 10px 0;
+  padding: 20px;
+  max-width: 83%;
 }
 </style>
