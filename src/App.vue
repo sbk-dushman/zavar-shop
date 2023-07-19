@@ -12,6 +12,7 @@ import BaseFooter from '@/components/BaseFooter.vue';
 import { mapActions, mapMutations } from 'vuex';
 
 export default {
+
   name: 'App',
   components: { BaseHeader, BaseFooter },
   created() {

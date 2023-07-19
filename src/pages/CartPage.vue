@@ -26,8 +26,10 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <CartItem v-for="item in products" :key="item.id"
-            :product="item" :product-avalibale="cartLoading"/>
+            <BaseLoader :is-loading="true" v-if="!cartLoaded"/>
+            <li class="cart__block" v-else-if="products.length=== 0" >Корзина пуста..</li>
+            <CartItem   v-for="item in products" :key="item.id"
+            :product="item" />
           </ul>
         </div>
 
@@ -51,25 +53,16 @@
 <script>
 import numberFormat from '@/helpers/numberFormat';
 import CartItem from '@/components/CartItem.vue';
-
+import BaseLoader from '@/components/BaseLoader.vue';
 import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      cartLoading: false,
-      cartLoadingFailed: false,
-    };
-  },
   filters: {
     numberFormat,
   },
-  components: { CartItem },
+  components: { CartItem, BaseLoader},
   computed: {
-    ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice' }),
-    productsNoAvalibale() {
-      return this.products ? this.cartLoading = false : this.cartLoading = true;
-    },
+    ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice', cartLoaded: 'cartLoaded' }),
   },
   methods: {
   },
@@ -77,5 +70,7 @@ export default {
 };
 </script>
 <style>
-
+.cart{
+  position: relative;
+}
 </style>

@@ -7,11 +7,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    cartProducts: [
-
-    ],
+    cartProducts: [],
     userAccessKey: null,
     cartProductsData: null,
+    cartLoaded: false,
   },
   mutations: {
 
@@ -28,7 +27,9 @@ export default new Vuex.Store({
       state.userAccessKey = accessKey;
     },
     updatateCartProductsData(state, cartProductsData) {
+
       state.cartProductsData = cartProductsData;
+      state.cartLoaded = true;
     },
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map((item) => {
@@ -57,6 +58,9 @@ export default new Vuex.Store({
     cartTotalPrice(state, getters) {
       return getters.cartProductsDitail.reduce((acc, item) => (
         item.productDitails.price * item.amount) + acc, 0);
+    },
+    cartLoaded(state) {
+      return state.cartLoaded;
     },
   },
   actions: {

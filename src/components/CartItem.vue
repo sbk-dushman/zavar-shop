@@ -1,6 +1,5 @@
 <template>
-          <BaseLoader :is-loading="(product ? false:true )" v-if="!product"/>
-           <li v-else-if="product" class="cart__item product">
+           <li  class="cart__item product">
               <div class="product__pic">
                 <img :src="product.productDitails.img" alt="Название товара">
               </div>
@@ -37,7 +36,7 @@ export default {
   filters: {
     numberFormat,
   },
-  components: { ProductCounter },
+  components: { ProductCounter},
 
   methods: {
     ...mapActions({ deletePoduct: 'deleteProductFromCart' }),
