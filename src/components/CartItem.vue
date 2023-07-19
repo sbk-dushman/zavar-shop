@@ -1,5 +1,6 @@
 <template>
-           <li class="cart__item product">
+          <BaseLoader :is-loading="(product ? false:true )" v-if="!product"/>
+           <li v-else-if="product" class="cart__item product">
               <div class="product__pic">
                 <img :src="product.productDitails.img" alt="Название товара">
               </div>
@@ -18,7 +19,7 @@
               </b>
 
               <button
-                @click="deletePoduct(product.productDitails.id,product.id)"
+                @click="deletePoduct(product.productDitails.id)"
                class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
                 <svg width="20" height="20" fill="currentColor">
                   <use xlink:href="#icon-close"></use>

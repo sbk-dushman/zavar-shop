@@ -27,7 +27,7 @@
         <div class="cart__field">
           <ul class="cart__list">
             <CartItem v-for="item in products" :key="item.id"
-            :product="item"/>
+            :product="item" :product-avalibale="cartLoading"/>
           </ul>
         </div>
 
@@ -51,18 +51,29 @@
 <script>
 import numberFormat from '@/helpers/numberFormat';
 import CartItem from '@/components/CartItem.vue';
+
 import { mapGetters } from 'vuex';
 
 export default {
+  data() {
+    return {
+      cartLoading: false,
+      cartLoadingFailed: false,
+    };
+  },
   filters: {
     numberFormat,
   },
   components: { CartItem },
   computed: {
     ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice' }),
+    productsNoAvalibale() {
+      return this.products ? this.cartLoading = false : this.cartLoading = true;
+    },
   },
   methods: {
   },
+
 };
 </script>
 <style>
