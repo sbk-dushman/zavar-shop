@@ -11,6 +11,7 @@ export default new Vuex.Store({
     userAccessKey: null,
     cartProductsData: null,
     cartLoaded: false,
+    deliveryPrice: 500,
   },
   mutations: {
 

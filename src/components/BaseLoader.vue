@@ -42,16 +42,9 @@ export default {
     };
   },
   watch: {
-    // isLoading(){
-
-    // }
   },
   props: ['isLoading', 'isLoadingFailed'],
   methods: {
-    reload() {
-      this.$emit('re-load');
-      // console.log('mox');
-    },
   },
 
 };

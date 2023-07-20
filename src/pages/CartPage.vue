@@ -41,9 +41,9 @@
             Итого: <span>{{TotalPrice | numberFormat}} ₽</span>
           </p>
 
-          <button class="cart__button button button--primery" type="submit">
+          <router-link  tag="button" :to="{name:'orderConfirm'}" class="cart__button button button--primery" type="submit">
             Оформить заказ
-          </button>
+          </router-link>
         </div>
       </form>
     </section>
@@ -60,7 +60,7 @@ export default {
   filters: {
     numberFormat,
   },
-  components: { CartItem, BaseLoader},
+  components: { CartItem, BaseLoader },
   computed: {
     ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice', cartLoaded: 'cartLoaded' }),
   },
