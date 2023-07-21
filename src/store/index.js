@@ -12,11 +12,15 @@ export default new Vuex.Store({
     cartProductsData: null,
     cartLoaded: false,
     deliveryPrice: 500,
+    orderInfo: [],
   },
   mutations: {
     resetCart(state) {
       state.cartProducts = [];
       state.cartProductsData = null;
+    },
+    upadateOrderInfo(state, orderInfo){
+      state.orderInfo = orderInfo;
     },
     updatateCartProductAmount(state, { productId, amount }) {
       const CartItem = state.cartProducts.find((item) => item.productId === productId);

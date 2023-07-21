@@ -167,7 +167,9 @@ export default {
       }).then((response) => {
         this.formData = {};
         this.$store.commit('resetCart');
+        this.$store.commit('upadateOrderInfo', response.data);
         this.formSanding = false;
+        this.$router.push({ name: 'orderInfo',params: { id: 10371 } });
       })
       .catch((error) => {
         this.formEror = error.response.data.error.request || {};
