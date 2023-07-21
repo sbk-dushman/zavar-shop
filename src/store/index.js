@@ -19,7 +19,7 @@ export default new Vuex.Store({
       state.cartProducts = [];
       state.cartProductsData = null;
     },
-    upadateOrderInfo(state, orderInfo){
+    upadateOrderInfo(state, orderInfo) {
       state.orderInfo = orderInfo;
     },
     updatateCartProductAmount(state, { productId, amount }) {
@@ -70,8 +70,20 @@ export default new Vuex.Store({
     cartLoaded(state) {
       return state.cartLoaded;
     },
+    getOrder(state) {
+      return state.orderInfo;
+    },
   },
   actions: {
+    loadOrderInfo(context, orderId) {
+      return axios.get( API_BASE_PATH + '/api/orders/'+ orderId,{
+        params: {
+          userAccessKey: context.state.userAccessKey,
+        },
+      }).then((response) => {
+        context.commit('upadateOrderInfo', response.data);
+      });
+    },
     loadCart(context) {
       return axios.get( API_BASE_PATH + '/api/baskets',{
         params: {
@@ -140,4 +152,5 @@ export default new Vuex.Store({
       });
     },
   },
+
 });

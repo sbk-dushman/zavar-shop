@@ -138,6 +138,7 @@ import numberFormat from '@/helpers/numberFormat';
 import axios from 'axios';
 import { API_BASE_PATH } from '@/config';
 import BaseLoader from '@/components/BaseLoader.vue';
+
 export default {
   name: 'OrderConfirm',
   filters: { numberFormat },
@@ -145,6 +146,7 @@ export default {
   computed: {
     ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice', cartLoaded: 'cartLoaded' }),
   },
+
   data() {
     return {
       formData: {},
@@ -169,7 +171,7 @@ export default {
         this.$store.commit('resetCart');
         this.$store.commit('upadateOrderInfo', response.data);
         this.formSanding = false;
-        this.$router.push({ name: 'orderInfo',params: { id: 10371 } });
+        this.$router.push({ name: 'orderInfo', params: { id: response.data.id } });// 10371
       })
       .catch((error) => {
         this.formEror = error.response.data.error.request || {};
