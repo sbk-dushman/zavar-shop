@@ -28,8 +28,9 @@
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form class="cart__form form" action="#" method="POST" @submit.prevent="sendOrder">
         <div class="cart__field">
+          <BaseLoader :is-loading="formSanding"/>
           <div class="cart__data">
             <BaseFormText title="ФИО"
                           v-model="formData.name"
@@ -51,9 +52,9 @@
              :error="formEror.email" />
 
             <BaseFormTextarea title="Комментарий к заказу"
-            v-model="formData.comments"
+            v-model="formData.comment"
             placeholder="Ваши пожелания"
-            :error="formEror.comments" />
+            :error="formEror.comment" />
           </div>
 
           <div class="cart__options">
@@ -100,27 +101,29 @@
         </div>
 
         <div class="cart__block">
+          <BaseLoader :is-loading="true" v-if="!cartLoaded"/>
           <ul class="cart__orders">
-            <li class="cart__order" v-for="item in products">
+            <li class="cart__order" v-for="item in products" :key="item.productId">
               <h3>{{item.productDitails.title}}</h3>
-              x <s> {{item.productDitails.amount}}</s> <b>{{item.productDitails.price | numberFormat}} ₽</b>
+              <span> x <i> {{item.amount}}</i></span>
               <span>Артикул: {{item.productDitails.id}}</span>
+              <b>  {{item.productDitails.price | numberFormat}} ₽</b>
             </li>
           </ul>
 
           <div class="cart__total">
             <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b> {{TotalPrice | numberFormat}} ₽</b></p>
+            <p>Итого: <b>{{products.length}}</b> товара на сумму <b> {{TotalPrice | numberFormat}} ₽</b></p>
           </div>
 
-          <button class="cart__button button button--primery" type="submit">
+          <button :disabled="formSanding" class="cart__button button button--primery" type="submit">
             Оформить заказ
           </button>
         </div>
-        <div class="cart__error form__error-block">
+        <div class="cart__error form__error-block" v-if="formErorMesage">
           <h4>Заявка не отправлена!</h4>
           <p>
-            Похоже произошла ошибка. Попробуйте отправить снова или перезагрузите страницу.
+            Похоже произошла ошибка. {{formErorMesage}}
           </p>
         </div>
       </form>
@@ -132,11 +135,13 @@ import { mapGetters } from 'vuex';
 import BaseFormText from '@/components/BaseFormText.vue';
 import BaseFormTextarea from '@/components/BaseFormTextarea.vue';
 import numberFormat from '@/helpers/numberFormat';
-
+import axios from 'axios';
+import { API_BASE_PATH } from '@/config';
+import BaseLoader from '@/components/BaseLoader.vue';
 export default {
   name: 'OrderConfirm',
   filters: { numberFormat },
-  components: { BaseFormTextarea, BaseFormText },
+  components: { BaseFormTextarea, BaseFormText, BaseLoader },
   computed: {
     ...mapGetters({ products: 'cartProductsDitail', TotalPrice: 'cartTotalPrice', cartLoaded: 'cartLoaded' }),
   },
@@ -144,7 +149,37 @@ export default {
     return {
       formData: {},
       formEror: {},
+      formErorMesage: '',
+      formSanding: false,
     };
+  },
+  methods: {
+    sendOrder() {
+      this.formSanding = true;
+      this.formEror = {};
+      this.formErorMesage = '';
+      axios.post(`${API_BASE_PATH}/api/orders`, {
+        ...this.formData,
+      }, {
+        params: {
+          userAccessKey: this.$store.state.userAccessKey,
+        },
+      }).then((response) => {
+        this.formData = {};
+        this.$store.commit('resetCart');
+        this.formSanding = false;
+      })
+      .catch((error) => {
+        this.formEror = error.response.data.error.request || {};
+        this.formErorMesage = error.response.data.error.message;
+        this.formSanding = false;
+      })
+    },
   },
 };
 </script>
+<style>
+.cart__block{
+  position: relative;
+}
+</style>
