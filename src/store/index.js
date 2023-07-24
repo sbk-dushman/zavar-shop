@@ -73,6 +73,9 @@ export default new Vuex.Store({
     getOrder(state) {
       return state.orderInfo;
     },
+    getDeliveryPrice(state) {
+     return state.deliveryPrice;
+    }
   },
   actions: {
     loadOrderInfo(context, orderId) {

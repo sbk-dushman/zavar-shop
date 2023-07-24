@@ -88,8 +88,8 @@
           </ul>
 
           <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>{{getOrder.basket.items.length}} </b> товара на сумму <b>{{getOrder.totalPrice | numberFormat }} ₽</b></p>
+            <p>Доставка: <b>{{getDeliveryPrice}} ₽</b></p>
+            <p>Итого: <b>{{getOrder.basket.items.length}} </b> товара на сумму <b>{{orderTotalPrice | numberFormat }} ₽</b></p>
             </div>
         </div>
       </form>
@@ -111,7 +111,10 @@ export default {
     this.$store.dispatch('loadOrderInfo', this.$route.params.id);
   },
   computed: {
-    ...mapGetters({ getOrder: 'getOrder' }),
+    ...mapGetters({ getOrder: 'getOrder', getDeliveryPrice: 'getDeliveryPrice' }),
+    orderTotalPrice() {
+      return this.getOrder.totalPrice + this.getDeliveryPrice;
+    },
   },
 };
 </script>
