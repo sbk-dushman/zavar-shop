@@ -20,7 +20,7 @@
       </ul>
 
       <h1 class="content__title">
-        Заказ оформлен <span>№ 23621</span>
+        Заказ оформлен <span>№    {{ getOrder.id }}</span>
       </h1>
     </div>
 
@@ -28,6 +28,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <p class="cart__message">
+
             Благодарим за&nbsp;выбор нашего магазина. На&nbsp;Вашу почту придет письмо с&nbsp;деталями заказа.
             Наши менеджеры свяжутся с&nbsp;Вами в&nbsp;течение часа для уточнения деталей доставки.
           </p>
@@ -38,7 +39,7 @@
                 Получатель
               </span>
               <span class="dictionary__value">
-                Иванова Василиса Алексеевна
+                {{ getOrder.name }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -46,7 +47,7 @@
                 Адрес доставки
               </span>
               <span class="dictionary__value">
-                Москва, ул. Ленина, 21, кв. 33
+                {{ getOrder.address }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -54,7 +55,7 @@
                 Телефон
               </span>
               <span class="dictionary__value">
-                8 800 989 74 84
+              {{ getOrder.phone }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -62,7 +63,7 @@
                 Email
               </span>
               <span class="dictionary__value">
-                lalala@mail.ru
+                {{ getOrder.email }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -78,27 +79,17 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <li class="cart__order" v-for="item in getOrder.basket.items" :key="item.id">
-              <h3>{{item.title}}</h3>
+            <li class="cart__order" v-for="item in getOrder.basket.items" :key="item.product.id">
+              <h3>{{item.product.title}}</h3>
               <span> x <i> {{item.quantity}}</i></span>
-              <span>Артикул: {{item.id}}</span>
-              <b>  {{item.price | numberFormat}} ₽</b>
+              <span>Артикул: {{item.product.id}}</span>
+              <b>  {{item.product.price | numberFormat}} ₽</b>
             </li>
-            <!-- <li class="cart__order">
-              <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-              <b>4 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-              <b>8 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li> -->
           </ul>
 
           <div class="cart__total">
             <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
+            <p>Итого: <b>{{getOrder.basket.items.length}} </b> товара на сумму <b>{{getOrder.totalPrice | numberFormat }} ₽</b></p>
             </div>
         </div>
       </form>
@@ -106,9 +97,13 @@
   </main>
 </template>
 <script>
+import numberFormat from '@/helpers/numberFormat';
 import { mapGetters } from 'vuex';
 
 export default {
+  filters: {
+    numberFormat,
+  },
   created() {
     if (this.getOrder && this.getOrder.id === this.$route.params.id) {
       return;
