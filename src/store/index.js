@@ -13,6 +13,7 @@ export default new Vuex.Store({
     cartLoaded: false,
     deliveryPrice: 500,
     orderInfo: [],
+    colorsData: [],
   },
   mutations: {
     resetCart(state) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     upadateOrderInfo(state, orderInfo) {
       state.orderInfo = orderInfo;
+    },
+    upadateColorsData(state, colorData) {
+      state.colorsData = colorData;
     },
     updatateCartProductAmount(state, { productId, amount }) {
       const CartItem = state.cartProducts.find((item) => item.productId === productId);
@@ -35,7 +39,6 @@ export default new Vuex.Store({
       state.userAccessKey = accessKey;
     },
     updatateCartProductsData(state, cartProductsData) {
-
       state.cartProductsData = cartProductsData;
       state.cartLoaded = true;
     },
@@ -63,6 +66,9 @@ export default new Vuex.Store({
         };
       });
     },
+    getColorsData(state) {
+      return state.colorsData;
+    },
     cartTotalPrice(state, getters) {
       return getters.cartProductsDitail.reduce((acc, item) => (
         item.productDitails.price * item.amount) + acc, 0);
@@ -74,10 +80,18 @@ export default new Vuex.Store({
       return state.orderInfo;
     },
     getDeliveryPrice(state) {
-     return state.deliveryPrice;
-    }
+      return state.deliveryPrice;
+    },
   },
   actions: {
+    loadColors(context) {
+      this.colorLoading = true;
+        return axios.get(API_BASE_PATH + '/api/colors')
+        .then((response) => context.commit('upadateColorsData', response.data.items))
+                .catch(() => this.productsLoadingFailed = true)
+                .then(() => this.colorLoading = false)
+
+      },
     loadOrderInfo(context, orderId) {
       return axios.get( API_BASE_PATH + '/api/orders/'+ orderId,{
         params: {

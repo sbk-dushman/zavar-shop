@@ -21,9 +21,10 @@ export default {
       this.updateUserAccessKey(userAccessKey);
     }
     this.loadCart();
+    this.loadColors();
   },
   methods: {
-    ...mapActions(['loadCart']),
+    ...mapActions(['loadCart', 'loadColors']),
     ...mapMutations(['updateUserAccessKey']),
   },
 };

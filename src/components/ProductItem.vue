@@ -14,34 +14,13 @@
 {{product.price | numberFormat}} ₽
 </span>
 
-<ul class="colors colors--black">
-<li class="colors__item">
-<label for="color-1" class="colors__label">
-  <input class="colors__radio sr-only" type="radio" name="color-1" value="#73B6EA" checked="">
-  <span class="colors__value" style="background-color: #73B6EA;">
-  </span>
-</label>
-</li>
-<li class="colors__item">
-<label class="colors__label">
-  <input class="colors__radio sr-only" type="radio" name="color-1" value="#8BE000">
-  <span class="colors__value" style="background-color: #8BE000;">
-  </span>
-</label>
-</li>
-<li class="colors__item">
-<label class="colors__label">
-  <input class="colors__radio sr-only" type="radio" name="color-1" value="#222">
-  <span class="colors__value" style="background-color: #222;">
-  </span>
-</label>
-</li>
-</ul>
+<ColorPicker :available-colors="product.colors" />
 </li>
 
 </template>
 <script>
 import numberFormat from '@/helpers/numberFormat';
+import ColorPicker from '@/components/ColorPicker.vue';
 
 export default {
   props: ['product'],
@@ -50,6 +29,7 @@ export default {
   },
   methods: {
   },
+  components: { ColorPicker },
 
 };
 
