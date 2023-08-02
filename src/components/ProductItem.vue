@@ -13,7 +13,7 @@
 <span class="catalog__price">
 {{product.price | numberFormat}} ₽
 </span>
-
+{{ product.colors.id }}
 <ColorPicker :available-colors="product.colors" />
 </li>
 
