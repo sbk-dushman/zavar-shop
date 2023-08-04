@@ -13,8 +13,7 @@
 <span class="catalog__price">
 {{product.price | numberFormat}} ₽
 </span>
-{{ product.colors.id }}
-<ColorPicker :available-colors="product.colors" />
+<ColorPicker  v-model="currentColor" :available="product.colors"  />
 </li>
 
 </template>
@@ -24,6 +23,11 @@ import ColorPicker from '@/components/ColorPicker.vue';
 
 export default {
   props: ['product'],
+  data() {
+    return {
+      currentColor: null,
+    };
+  },
   filters: {
     numberFormat,
   },
